@@ -1,4 +1,5 @@
 import styled from "styled-components/macro";
+import { useState } from "react";
 
 const theme = {
 	blue: {
@@ -11,7 +12,7 @@ const theme = {
 	},
 	yellow: {
 		default: "#f3de2c",
-		hover: "#fb6107",
+		hover: "#e59500",
 	},
 };
 
@@ -29,6 +30,10 @@ const Button = styled.button`
 	&:hover {
 		background-color: ${(props) => theme[props.theme].hover};
 	}
+	&:disabled {
+		cursor: default;
+		opacity: 0.5;
+	}
 `;
 
 Button.defaultProps = {
@@ -37,6 +42,37 @@ Button.defaultProps = {
 
 function clickMe() {
 	alert("You clicked me!");
+}
+
+const ButtonToggle = styled(Button)`
+	opacity: 0.7;
+	${({ active }) =>
+		active &&
+		`
+opacity: 1;
+`}
+`;
+
+const types = ["Cash", "Credit Card", "Bitcoin"];
+
+function ToggleGroup() {
+	const [active, setActive] = useState(types[0]);
+	return (
+		<>
+			<div>
+				{types.map((type) => (
+					<ButtonToggle
+						active={active === type}
+						onClick={() => setActive(type)}
+					>
+						{type}
+					</ButtonToggle>
+				))}
+			</div>
+
+			<p> Your payment selection: {active} </p>
+		</>
+	);
 }
 
 export default function App() {
@@ -56,6 +92,17 @@ export default function App() {
 					Button
 				</Button>
 			</div>
+			<div>
+				<Button disabled onClick={clickMe}>
+					Button
+				</Button>
+			</div>
+			<div>
+				<a href="http://google.com" target="_blank" rel="noreferrer">
+					<Button>Link</Button>
+				</a>
+			</div>
+			<ToggleGroup />
 		</>
 	);
 }
